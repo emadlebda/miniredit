@@ -23,4 +23,5 @@ Auth::routes(['verify' => true]);
 Route::group(['middleware' => ['auth', 'verified']], function () {
 
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    Route::resource('communities', \App\Http\Controllers\CommunitiesController::class);
 });
