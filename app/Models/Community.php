@@ -18,6 +18,11 @@ class Community extends Model
         return $this->belongsToMany(Topic::class);
     }
 
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
+
 
     /**
      * Return the sluggable configuration array for this model.
