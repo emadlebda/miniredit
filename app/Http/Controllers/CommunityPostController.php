@@ -6,6 +6,7 @@ use App\Http\Requests\StorePostRequest;
 use App\Models\Community;
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Intervention\Image\Facades\Image;
 
 class CommunityPostController extends Controller
 {
@@ -47,6 +48,12 @@ class CommunityPostController extends Controller
             $image = $request->file('post_image')->getClientOriginalName();
             $request->file('post_image')->storeAs('posts/' . $post->id, $image);
             $post->update(['post_image' => $image]);
+
+            $file = Image::make(storage_path('app/public/posts/' . $post->id . '/' . $image));
+            $file->resize(600, null, function ($constraint) {
+                $constraint->aspectRatio();
+            });
+            $file->save(storage_path('app/public/posts/' . $post->id . '/thumbnail_' . $image));
         }
 
         return redirect()->route('communities.show', $community);
@@ -93,13 +100,17 @@ class CommunityPostController extends Controller
         if ($request->hasFile('post_image')) {
             $image = $request->file('post_image')->getClientOriginalName();
             $request->file('post_image')->storeAs('posts/' . $post->id, $image);
-            dump('hasFile');
-            if ($post->post_image != '') {
-                dump('unlink old one');
+            if ($post->post_image != '' && $post->post_image != $image) {
                 unlink(storage_path('app/public/posts/' . $post->id . '/' . $post->post_image));
+                unlink(storage_path('app/public/posts/' . $post->id . '/thumbnail_' . $post->post_image));
             }
 
             $post->update(['post_image' => $image]);
+            $file = Image::make(storage_path('app/public/posts/' . $post->id . '/' . $image));
+            $file->resize(600, null, function ($constraint) {
+                $constraint->aspectRatio();
+            });
+            $file->save(storage_path('app/public/posts/' . $post->id . '/thumbnail_' . $image));
         }
 
         return view('posts.show', compact('community', 'post'));
