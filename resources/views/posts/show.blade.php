@@ -16,6 +16,28 @@
                             </div>
                         @endif
                         {{$post->post_text}}
+
+
+                        <hr>
+                        @auth
+                            @if ($post->user_id == auth()->id())
+                                <a href="{{route('communities.posts.edit',[$community,$post])}}"
+                                   class="btn btn-sm btn-primary"
+                                >Edit Post</a>
+
+
+                                <form action="{{ route('communities.posts.destroy', [$community,$post]) }}"
+                                      method="POST"
+                                      style="display: inline-block">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit"
+                                            class="btn btn-sm btn-danger"
+                                            onclick="return confirm('Are you sure?')">Delete Post
+                                    </button>
+                                </form>
+                            @endif
+                        @endauth
                     </div>
                 </div>
             </div>
