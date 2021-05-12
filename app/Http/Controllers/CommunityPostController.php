@@ -36,12 +36,18 @@ class CommunityPostController extends Controller
      */
     public function store(StorePostRequest $request, Community $community)
     {
-        $community->posts()->create([
+        $post = $community->posts()->create([
             'user_id' => auth()->id(),
             'title' => $request->title,
             'post_text' => $request->post_text ?? null,
             'post_url' => $request->post_url ?? null,
         ]);
+
+        if ($request->hasFile('post_image')) {
+            $image = $request->file('post_image')->getClientOriginalName();
+            $request->file('post_image')->storeAs('posts/' . $post->id, $image);
+            $post->update(['post_image' => $image]);
+        }
 
         return redirect()->route('communities.show', $community);
     }
@@ -81,7 +87,21 @@ class CommunityPostController extends Controller
     public function update(StorePostRequest $request, Community $community, Post $post)
     {
         abort_if($post->user_id != auth()->id(), 403);
+
         $post->update($request->validated());
+
+        if ($request->hasFile('post_image')) {
+            $image = $request->file('post_image')->getClientOriginalName();
+            $request->file('post_image')->storeAs('posts/' . $post->id, $image);
+            dump('hasFile');
+            if ($post->post_image != '') {
+                dump('unlink old one');
+                unlink(storage_path('app/public/posts/' . $post->id . '/' . $post->post_image));
+            }
+
+            $post->update(['post_image' => $image]);
+        }
+
         return view('posts.show', compact('community', 'post'));
 
     }
