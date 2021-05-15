@@ -23,6 +23,11 @@ class Community extends Model
         return $this->hasMany(Post::class);
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
 
     /**
      * Return the sluggable configuration array for this model.
