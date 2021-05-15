@@ -24,4 +24,9 @@ class Post extends Model
     {
         return $this->belongsTo(Community::class);
     }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class)->latest();
+    }
 }
