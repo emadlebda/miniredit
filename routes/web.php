@@ -19,8 +19,8 @@ Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('ho
 Auth::routes(['verify' => true]);
 
 
-//Route::group(['middleware' => ['auth', 'verified']], function () {
-Route::group(['middleware' => ['auth']], function () {
+Route::group(['middleware' => ['auth', 'verified']], function () {
+//Route::group(['middleware' => ['auth']], function () {
 
     Route::resource('communities', \App\Http\Controllers\CommunitiesController::class);
     Route::resource('communities.posts', \App\Http\Controllers\CommunityPostController::class);

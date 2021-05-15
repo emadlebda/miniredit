@@ -2,9 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\PostVote;
 use Illuminate\Database\Seeder;
 
-class PostSeeder extends Seeder
+class PostVotesSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -13,6 +14,7 @@ class PostSeeder extends Seeder
      */
     public function run()
     {
-        //
+        PostVote::factory()->times(500)->create();
+
     }
 }
