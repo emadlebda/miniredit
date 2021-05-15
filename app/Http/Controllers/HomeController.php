@@ -15,9 +15,9 @@ class HomeController extends Controller
     public function index()
     {
         $posts = Post::with('community')
-            ->withCount(['votes' => function ($query) {
+            ->withCount(['postVotes' => function ($query) {
                 $query->where('post_votes.created_at', '>', now()->subDays(7))->where('vote', 1);
-            }])->orderBy('votes_count', 'desc')
+            }])->orderBy('post_votes_count', 'desc')
             ->take(10)
             ->get();
 

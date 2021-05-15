@@ -51,9 +51,6 @@
                 @endcan
 
                 @can ('delete-post',$post)
-
-
-
                     <form action="{{ route('communities.posts.destroy', [$community, $post]) }}"
                           method="POST"
                           style="display: inline-block">

@@ -56,7 +56,7 @@ class CommunitiesController extends Controller
      */
     public function show(Community $community)
     {
-        $query = $community->posts();
+        $query = $community->posts()->with('postVotes');
         if (request('sort', '') == 'popular') {
             $query->orderByDesc('votes');
         } else {
