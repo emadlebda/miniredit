@@ -10,7 +10,17 @@
                             <div class="col-8">
                                 <h1>{{ $community->name }}</h1>
                             </div>
-             
+                            <div class="col-4 text-right">
+                                <a href="{{ route('communities.show', $community) }}"
+                                   @if (request('sort', '') == '') style="font-size: 20px" @endif>
+                                    Newest posts
+                                </a>
+                                <br/>
+                                <a href="{{ route('communities.show', $community) }}?sort=popular"
+                                   @if (request('sort', '') == 'popular') style="font-size: 20px" @endif>
+                                    Popular posts
+                                </a>
+                            </div>
                         </div>
                     </div>
 
