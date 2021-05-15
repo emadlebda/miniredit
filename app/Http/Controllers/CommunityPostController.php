@@ -8,6 +8,7 @@ use App\Models\Post;
 use App\Models\PostVote;
 use App\Notifications\PostReportNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Intervention\Image\Facades\Image;
 
 class CommunityPostController extends Controller
@@ -96,7 +97,7 @@ class CommunityPostController extends Controller
      */
     public function update(StorePostRequest $request, Community $community, Post $post)
     {
-        abort_if($post->user_id != auth()->id(), 403);
+        abort_if(Gate::denies('edit-post', $post), 403);
 
         $post->update($request->validated());
 
@@ -128,7 +129,7 @@ class CommunityPostController extends Controller
      */
     public function destroy(Community $community, Post $post)
     {
-        abort_if(!in_array(auth()->id(), [$post->user_id, $community->user_id]), 403);
+        abort_if(Gate::denies('delete-post', $post), 403);
 
         $post->delete();
 
